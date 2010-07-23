@@ -341,11 +341,19 @@ class Search {
             . "LEFT JOIN taglinks AS tagl ON image.id = tagl.object \n"
             . "LEFT JOIN tags ON tags.id = tagl.tag \n";
 
+        $offset = 0;
+        $count = DEFAULT_IMAGE_COUNT;
+        if(isset($this->query['limit']['offset'])) {
+            $offset = $this->query['limit']['offset'];
+        }
+        if(isset($this->query['limit']['count'])) {
+            $count = $this->query['limit']['count'];
+        }
         $query .= "WHERE " . $this->getTags();
         $query .= "GROUP BY image.id " . "\n";
         $query .= $this->getOrder();
-        $query .= "LIMIT ".$this->query['limit']['offset'].","
-            .$this->query['limit']['count'];
+        $query .= "LIMIT ".$offset.","
+            .$count;
 
 
         trigger_error("SQL Query is <pre>$query</pre>", E_USER_NOTICE);
